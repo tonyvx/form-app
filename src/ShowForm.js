@@ -26,7 +26,7 @@ export const ShowForm = ({ formData, open, setOpen }) => {
                     doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                 }
-                doc.save('file.pdf');
+                doc.save("FACILITY_USE_AGREEMENT_" + formData.date + "_" + formData.lessor+".pdf");
             })
             ;
     }
