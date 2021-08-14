@@ -87,26 +87,25 @@ const App = () => {
         <Grid item xs={3} className={classes.label} >
           <Typography variant="overline" align="left">Date requested</Typography>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <TextField name="date" id="standard-basic" size="small" type="date" onChange={saveData} />
         </Grid>
-        <Grid item xs={1} />
+        <Grid item xs={0} />
 
         <Grid item xs={3} className={classes.label} >
           <Typography variant="overline" align="left">Time</Typography>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <Grid container>
-            <Grid item xs={5}>
+            <Grid item xs={6}>
               <TextField name="start" id="standard-basic" size="small" type="time" onChange={saveData} />
             </Grid>
-            <Grid item xs={2} />
-            <Grid item xs={5}>
+            <Grid item xs={6}>
               <TextField name="end" id="standard-basic" size="small" type="time" onChange={saveData} />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={1} />
+        <Grid item xs={0} />
 
         <Grid item xs={3} className={classes.label} >
           <Typography variant="overline" align="left">Signature</Typography>
