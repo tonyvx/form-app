@@ -86,10 +86,10 @@ const App = () => {
         <Grid item xs={1} />
 
         <Grid item xs={3} className={classes.label} >
-          <Typography variant="overline" align="left">Date requested</Typography>
+          <Typography variant="overline" align="left">Date</Typography>
         </Grid>
         <Grid item xs={9}>
-          <TextField name="date" id="standard-basic" size="small" type="date" onChange={saveData} />
+          <TextField name="date" id="standard-basic" size="small"  value={formData.date} onChange={saveData} />
         </Grid>
         <Grid item xs={0} />
 
@@ -99,10 +99,10 @@ const App = () => {
         <Grid item xs={9}>
           <Grid container>
             <Grid item xs={6}>
-              <TextField name="start" id="standard-basic" size="small" type="time" onChange={saveData} />
+              <TextField name="start" id="standard-basic" size="small" value={formData.start}  onChange={saveData} />
             </Grid>
             <Grid item xs={6}>
-              <TextField name="end" id="standard-basic" size="small" type="time" onChange={saveData} />
+              <TextField name="end" id="standard-basic" size="small" value={formData.end} onChange={saveData} />
             </Grid>
           </Grid>
         </Grid>
@@ -121,6 +121,9 @@ const App = () => {
         <Grid item xs={8} align="center">
           <Button name="sign" onClick={() => saveData({ target: { name: "sign", value: signPad.canvas.toDataURL() } })} >
             <Typography variant="button">Accept Signature</Typography>
+          </Button>
+          <Button name="sign" onClick={() => { saveData({ target: { name: "sign", value: null } }); signPad.clear(); }} >
+            <Typography variant="button">Clear Signature</Typography>
           </Button>
         </Grid>
         <Grid item xs={1}></Grid>
