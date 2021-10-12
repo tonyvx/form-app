@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from "@mui/material";
 import html2pdf from "html2pdf.js";
 import React, { useEffect, useRef } from "react";
 
@@ -13,7 +13,7 @@ export const ShowForm = ({ formData, open, setOpen }) => {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'legacy','avoid-all'] }
+            pagebreak: { mode: ['css', 'legacy', 'avoid-all'] }
         };
 
         html2pdf().set(opt).from(document.getElementById("divToPrint")).save();
@@ -62,11 +62,11 @@ const Aggrement = ({ formData }) => {
             </Typography>
 
             <Typography gutterBottom align="justify">
-                <b>1.1.</b> FOR AND IN CONSIDERATION OF the sum of <b>$0</b>, PARISH agrees to allow the FACILITY USER the use of the Facility for the date(s) of  <b>{formData.date}</b> for the purposes of <b>{formData.purpose}</b> (hereafter referred to as the <b>“Event”</b>).
+                <b>1.1.</b> FOR AND IN CONSIDERATION OF the sum of <b>$0</b>, PARISH agrees to allow the FACILITY USER the use of the Facility for the date(s) of  <b>{formatDate(formData.date)}</b> for the purposes of <b>{formData.purpose}</b> (hereafter referred to as the <b>“Event”</b>).
             </Typography>
 
             <Typography gutterBottom align="justify">
-                <b>1.2.</b> During the dates of this Event, the FACILITY USER shall have access to the building between the hours of <b>{formData.start}</b> - <b>{formData.end}</b> on <b>{formData.date}</b> set up and take down of decorations within the Facility..
+                <b>1.2.</b> During the dates of this Event, the FACILITY USER shall have access to the building between the hours of <b>{formatTime(formData.start)}</b> - <b>{formatTime(formData.end)}</b> on <b>{formatDate(formData.date)}</b> set up and take down of decorations within the Facility..
             </Typography>
 
             <Typography gutterBottom align="justify">
@@ -170,7 +170,7 @@ const Aggrement = ({ formData }) => {
                         <Grid item xs={12} align="center" style={{ width: 200, height: 170 }}><img src={formData.sign} width="200px" height="170px" alt="Lessor's Signature" /></Grid>
                         <Grid item xs={12} align="center">Signature</Grid>
                         <Grid item xs={12} align="center">{formData.lessor}</Grid>
-                        <Grid item xs={12} align="center">Date: <b>{setDateSigned(new Date())}</b></Grid>
+                        <Grid item xs={12} align="center">Date: <b>{formatDate(new Date())}</b></Grid>
                     </Grid>
                 </Grid>
             </Grid>
@@ -179,6 +179,10 @@ const Aggrement = ({ formData }) => {
     </div >;
 }
 
-function setDateSigned(birthday) {
-    return birthday.getMonth() + "/" + birthday.getDate() + "/" + birthday.getFullYear();
+function formatDate(date) {
+    return String(date.getMonth()).padStart(2, "0") + "/" + String(date.getDate()).padStart(2, "0") + "/" + String(date.getFullYear()).padStart(4, "0");
+}
+
+function formatTime(date) {
+    return String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0");
 }
