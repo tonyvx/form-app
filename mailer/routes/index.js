@@ -7,7 +7,7 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 /* GET users listing. */
-router.get('/email', async function (req, res, next) {
+router.post('/email', async function (req, res, next) {
   console.log(req.body);
   // res.send('respond with a resource');
   const info = await mailer().sendMail({

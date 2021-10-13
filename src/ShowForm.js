@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, Divider, Grid, Typography } from "@mui/material";
 import html2pdf from "html2pdf.js";
 import React, { useEffect, useRef } from "react";
 
@@ -7,30 +7,54 @@ export const ShowForm = ({ formData, open, setOpen }) => {
     const handleClose = () => setOpen(false);
 
 
-    function demoFromHTML(name) {
+    async function savePDF(name) {
         var opt = {
             filename: name + '.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'legacy', 'avoid-all'] }
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all'] },
+            margin: 0.5
         };
 
-        html2pdf().set(opt).from(document.getElementById("divToPrint")).save();
-        handleClose();
+        await html2pdf().set(opt).from(document.getElementById("divToPrint")).save();
 
+        const message = `Basement rental request for ${formData.lessor}`;
+
+        const response = await fetch("http://localhost:8080/email", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                to: {
+                    name: formData.lessor,
+                    email: "antonygeorge001@gmail.com"
+                },
+                message: {
+                    subject: message,
+                    plainText: message,
+                    htmlBody: "<b>" + message + "</b>"
+
+                },
+                attachment: {
+                    filename: getFileName(formData) + ".pdf",
+                    filePath: "/home/avalantra/Downloads/" + getFileName(formData) + ".pdf"
+                }
+
+            })
+        });
+        // const data = await response.json();
+        // console.log(data);
+        handleClose();
     }
 
     return (
         <Dialog open={open} maxWidth="lg">
-            <DialogTitle onClose={handleClose}  >
-                <Typography align="center"><b>FACILITY USE AGREEMENT</b></Typography>
-            </DialogTitle>
-            <DialogContent dividers >
+
+            <DialogContent >
                 <Aggrement formData={formData} ></Aggrement>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => { demoFromHTML(); }}>Submit Request</Button>
+                <Button onClick={() => { savePDF(getFileName(formData)); }}>Submit Request</Button>
             </DialogActions>
         </Dialog >
     );
@@ -52,7 +76,10 @@ const Aggrement = ({ formData }) => {
         overflowX: "hidden",
     }}>
         <div style={{ margin: 16 }}>
+            <Typography align="center" variant={"h4"}><b>FACILITY USE AGREEMENT</b></Typography>
+            <Divider />
             <br />
+
             <Typography gutterBottom align="justify">
                 This is an agreement between <b>St.Thomas Syro Malabar Church, Boston</b>  (hereafter referred to as <b>“PARISH”</b>) and <b>{formData.lessor} </b>(hereafter referred to as <b>“FACILITY USER”</b>) for the use of Church basement (hereafter referred to as the “Facility”) located at 41 Brook Street, Framingham, MA - 01701.
             </Typography>
@@ -177,6 +204,10 @@ const Aggrement = ({ formData }) => {
 
         </div>
     </div >;
+}
+
+function getFileName(formData) {
+    return "FacilityUseAggreement-" + formatDate(new Date(formData.date)).replace("\/", "_").replace("\/", "_") + "-" + (!!formData.lessor ? formData.lessor.replace(" ", "") : formData.lessor);
 }
 
 function formatDate(date) {
